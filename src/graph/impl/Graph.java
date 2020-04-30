@@ -1,7 +1,11 @@
 package graph.impl;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
+
 
 import graph.IGraph;
 import graph.INode;
@@ -16,6 +20,7 @@ import graph.NodeVisitor;
  */
 public class Graph implements IGraph
 {
+    HashMap<String,INode> nodes = new HashMap<String,INode>();
     
     /**
      * Return the {@link Node} with the given name.
@@ -29,7 +34,13 @@ public class Graph implements IGraph
      * @return
      */
     public INode getOrCreateNode(String name) {
-        throw new UnsupportedOperationException("Implement this method");
+        if(this.containsNode(name)){
+        	return nodes.get(name);
+        } else {
+        	nodes.put(name, new Node(name));
+        	return nodes.get(name);
+        	
+        }
     }
 
     /**
@@ -40,7 +51,7 @@ public class Graph implements IGraph
      * @return
      */
     public boolean containsNode(String name) {
-        throw new UnsupportedOperationException("Implement this method");
+        return nodes.containsKey(name);
     }
 
     /**
@@ -49,7 +60,7 @@ public class Graph implements IGraph
      * @return
      */
     public Collection<INode> getAllNodes() {
-        throw new UnsupportedOperationException("Implement this method");
+        return nodes.values();
     }
     
     /**
@@ -63,8 +74,23 @@ public class Graph implements IGraph
      */
     public void breadthFirstSearch(String startNodeName, NodeVisitor v)
     {
-        // TODO: Implement this method
-        throw new UnsupportedOperationException("Implement this method");
+        LinkedList<INode> fringe = new LinkedList<INode>();
+        //add to the end
+        HashSet<String> visited = new HashSet<String>();
+        
+        INode curr = this.getOrCreateNode(startNodeName);
+        
+        while(fringe.isEmpty() != true) {
+        	if(visited.contains(curr.getName())) {
+        		//don't visit more than once
+        		continue;
+        	} else {
+        		v.visit(curr);
+            	visited.add(curr.getName());
+            	fringe.addAll(curr.getNeighbors());
+        	}
+        	curr = fringe.getFirst(); //so it's FIFO
+        }
     }
 
     /**
@@ -77,10 +103,26 @@ public class Graph implements IGraph
      * @param v
      */
     public void depthFirstSearch(String startNodeName, NodeVisitor v)
-    {
-        // TODO: implement this method
-        throw new UnsupportedOperationException("Implement this method");
+    { //copied from breadth first
+    	LinkedList<INode> fringe = new LinkedList<INode>();
+        //add to the end
+        HashSet<String> visited = new HashSet<String>();
+        
+        INode curr = this.getOrCreateNode(startNodeName);
+        
+        while(fringe.isEmpty() != true) {
+        	if(visited.contains(curr.getName())) {
+        		//don't visit more than once
+        		continue;
+        	} else {
+        		v.visit(curr);
+            	visited.add(curr.getName());
+            	fringe.addAll(curr.getNeighbors());
+        	}
+        	curr = fringe.getLast();//so it's LIFO
+        }
     }
+    
 
     /**
      * Perform Dijkstra's algorithm for computing the cost of the shortest path
