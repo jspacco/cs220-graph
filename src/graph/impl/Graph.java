@@ -79,6 +79,7 @@ public class Graph implements IGraph
         HashSet<String> visited = new HashSet<String>();
         
         INode curr = this.getOrCreateNode(startNodeName);
+        fringe.add(curr);
         
         while(fringe.isEmpty() != true) {
         	if(visited.contains(curr.getName())) {
