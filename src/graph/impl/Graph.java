@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
-
+import java.util.Map.Entry;
 
 import graph.IGraph;
 import graph.INode;
@@ -152,7 +152,42 @@ public class Graph implements IGraph
      * @return
      */
     public IGraph primJarnik() {
-        //TODO Implement this method
-        throw new UnsupportedOperationException();
+        // old graph and new graph
+    	//go through each node and find any new nodes, add the edge to that new node
+    	//continue until no new nodes are found
+    	//so what do we need...
+    	
+    	//list of nodes we have found but not checked yet
+    	LinkedList<String> fringe = new LinkedList<String>();
+    	// new graph
+    	IGraph mst = new Graph();
+    	//set of visited nodes
+    	HashMap<String,INode> visited = new HashMap<String,INode>();
+    	INode curr = nodes. ;//get a random node from the graph;
+    	
+    	fringe.add(curr.getName());
+    	for(String name : fringe) {
+    		curr = nodes.get(name);
+    		if(mst.containsNode(curr.getName()))
+    			continue;
+    		else {
+    			//make a node with the same name
+    			INode nnode = new Node(curr.getName());
+    		
+    		
+    			for (INode neighbor : curr.getNeighbors()) {
+    				if(mst.containsNode(neighbor.getName())) {
+    					continue;
+    				}
+    				else {
+    					fringe.add(neighbor.getName());
+    					nnode.addUndirectedEdgeToNode(neighbor, curr.getWeight(neighbor));
+    				}
+    				
+    			}
+    		}
+    	}
+    	
+    	return mst;
     }
 }
